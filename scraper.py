@@ -53,6 +53,9 @@ async def get_word_def__merriam_webster(client, word):
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
+        title = soup.find('h1', class_='hword').string.strip();
+        assert(title == word)
+
         pos = clean_str_list([e.string for e in soup.find_all('span', class_='fl')])
         assert(len(pos) > 0)
 
