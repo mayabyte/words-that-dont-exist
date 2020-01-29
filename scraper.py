@@ -51,13 +51,21 @@ async def get_word_def__merriam_webster(client, word):
     try:
         response = await client.get(merriam_webster_definition_url.format(word))
         response.raise_for_status()
-
         soup = BeautifulSoup(response.text, 'html.parser')
-        pos = [e.string for e in soup.find_all('span', class_='fl')]
-        ipa = [e.next_sibling.string or list(e.next_sibling.strings)[0].strip() for e in soup.find_all('span', class_='first-slash')]
+
+        pos = clean_str_list([e.string for e in soup.find_all('span', class_='fl')])
+        assert(len(pos) > 0)
+
+        ipa = clean_str_list([
+            e.next_sibling.string or list(e.next_sibling.strings)[0]
+            for e in soup.find_all('span', class_='first-slash')
+        ])
+        assert(len(ipa) > 0)
+
         for e in soup.find_all(class_='mw_t_bc'):
             e.decompose()
-        definitions = [' '.join(''.join(d.strings).strip().split()) for d in soup.find_all('span', class_='dtText')]
+        definitions = [' '.join(''.join(d.strings).strip().split()).strip() for d in soup.find_all('span', class_='dtText')]
+        assert(len(definitions) > 0)
 
         entry = {
             'title': word,
@@ -69,7 +77,6 @@ async def get_word_def__merriam_webster(client, word):
     except httpx.HTTPError as e:
         raise e
     except Exception as e:
-        print(word, e)
         return None
 
 async def try_get(client, word):
@@ -82,9 +89,12 @@ def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i+n]
 
+def clean_str_list(lst):
+    return list(filter(lambda x: len(x) > 0, map(lambda x: x.strip(), lst)))
+
 async def get_all_definitions():
     words = load_words()
-    chunk_size = 700
+    chunk_size = 1500
 
     print("Scraping dictionary entries...")
     print("(This takes a long time. Scraped entries are saved to file after each chunk, so feel free to exit early if you feel you have enough data.)")
