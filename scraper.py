@@ -68,7 +68,7 @@ async def get_word_def__merriam_webster(client, word):
         assert(len(definitions) > 0)
 
         entry = {
-            'title': word,
+            'word': word,
             'pos': pos,
             'ipa': ipa,
             'defs': definitions
