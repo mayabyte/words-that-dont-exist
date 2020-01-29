@@ -1,5 +1,6 @@
 venv/
 models/
+checkpoint/
 entries.txt
 words.txt
 dictionary.txt

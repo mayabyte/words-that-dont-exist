@@ -8,4 +8,7 @@ entries.txt: venv
 
 scrape: entries.txt
 
-.PHONY: scrape
+train: entries.txt
+	python3 train.py
+
+.PHONY: scrape, train

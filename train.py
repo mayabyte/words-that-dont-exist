@@ -14,6 +14,7 @@ def entry_to_string(entry):
     ipa = entry['ipa'][0]
     return f'{entry["word"]} ({pos})\n/{ipa}/\n\n{definitions_string}\n\n'
 
+print('Writing dictionary entries...')
 
 file_name = 'dictionary.txt'
 if os.path.isfile(file_name):
@@ -37,4 +38,14 @@ random.shuffle(entry_strings)
 with open(file_name, 'w+') as dest:
     for entry in entry_strings:
         dest.write(entry)
-        
+
+print('done.\n\nTraining model...')
+
+sess = gpt2.start_tf_sess()
+gpt2.finetune(
+    sess,
+    file_name,
+    model_name=model_name,
+    steps=1000
+)
+gpt2.generate(sess)
