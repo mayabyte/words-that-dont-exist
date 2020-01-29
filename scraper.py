@@ -22,6 +22,7 @@ def load_words(filter_existing_entries=True):
         f.write(words_req.text)
         words = list(words_req.json())
     words = set(filter(lambda x: len(x) > 2, words))
+    print('Words loaded.')
 
     if filter_existing_entries:
         try:
@@ -29,7 +30,7 @@ def load_words(filter_existing_entries=True):
                 num_total_words = len(words)
                 existing_words = {json.loads(line)['title'] for line in entry_file}
                 words = words.difference(existing_words)
-                print('Removed {} already-scraped words'.format(num_total_words-len(words)))
+                print('Removed {} already-scraped words.'.format(num_total_words-len(words)))
         except Exception as e:
             pass # no entries file, nothing to do
 
@@ -37,7 +38,6 @@ def load_words(filter_existing_entries=True):
     words = list(words)
     shuffle(words)
 
-    print('Words loaded.')
     return words
 
 
