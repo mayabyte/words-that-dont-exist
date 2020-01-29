@@ -4,3 +4,4 @@ checkpoint/
 entries.txt
 words.txt
 dictionary.txt
+__pycache__/
