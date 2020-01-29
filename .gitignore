@@ -1,3 +1,5 @@
 venv/
+models/
 entries.txt
 words.txt
+dictionary.txt
