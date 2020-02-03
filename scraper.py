@@ -124,3 +124,6 @@ def save_dictionary_entries(entries):
     with open('entries.txt', 'a') as f:
         for entry in entries:
             f.write(json.dumps(entry) + '\n')
+
+if __name__ == '__main__':
+    asyncio.run(get_all_definitions())
